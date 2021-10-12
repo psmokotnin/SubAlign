@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>SideBar.qml</file>
+        <file>settings/Alignment.qml</file>
+        <file>elements/FloatSpinBox.qml</file>
+        <file>elements/SelectableSpinBox.qml</file>
+        <file>settings/Mains.qml</file>
+        <file>settings/Subwoofer.qml</file>
+        <file>settings/Audience.qml</file>
+        <file>settings/Environment.qml</file>
+        <file>ChartGrid.qml</file>
+        <file>ChartWrap.qml</file>
+    </qresource>
+</RCC>
