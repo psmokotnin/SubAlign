@@ -36,6 +36,10 @@ INCLUDEPATH += charts
 HEADERS += \
     alignment.h \
     audience.h \
+    charts/axis.h \
+    charts/padding.h \
+    charts/item.h \
+    charts/phaseoffset.h \
     charts/spl.h \
     environment.h \
     loudspeaker.h
@@ -43,6 +47,9 @@ HEADERS += \
 SOURCES += \
         alignment.cpp \
         audience.cpp \
+        charts/axis.cpp \
+        charts/item.cpp \
+        charts/phaseoffset.cpp \
         charts/spl.cpp \
         environment.cpp \
         loudspeaker.cpp \

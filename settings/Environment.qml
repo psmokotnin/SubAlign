@@ -25,7 +25,7 @@ GridLayout {
 
         onValueChanged: {
             alignment.environment.temperature = value
-            speed.value = speedOfSound();
+            speed.value = alignment.environment.speedOfSound;
         }
     }
 
@@ -43,12 +43,8 @@ GridLayout {
         to: 1000
 
         indicators: false
-        value: speedOfSound()
+        value: alignment.environment.speedOfSound
         Layout.fillWidth: true
         enabled: false
-    }
-
-    function speedOfSound() {
-        return 20.05 * Math.sqrt(273.15 + temp.value);
     }
 }

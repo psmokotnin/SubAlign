@@ -12,15 +12,18 @@ class Audience : public QObject
 public:
     explicit Audience(QObject *parent = nullptr);
 
-    QPointF start() const;
-    void setStart(const QPointF &start);
+    QPointF &start() noexcept;
+    QPointF const &start() const noexcept;
+    void setStart(const QPointF &start) noexcept;
 
-    QPointF stop() const;
-    void setStop(const QPointF &stop);
+    QPointF &stop() noexcept;
+    QPointF const &stop() const noexcept;
+    void setStop(const QPointF &stop) noexcept;
 
 signals:
     void startChanged(const QPointF &);
     void stopChanged(const QPointF &);
+    void changed();
 
 private:
     QPointF m_start, m_stop;

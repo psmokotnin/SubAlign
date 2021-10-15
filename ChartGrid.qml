@@ -1,36 +1,52 @@
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Controls.Material 2.12
 import SubAlign 1.0
 
 GridLayout {
     id: grid
+
+    property int spacing : 10
+    property string chartBackground : "white"// "#c7d4a1"
+    property Alignment source : alignment
     rows: 2
     columns: 3
 
+    columnSpacing: spacing
+    rowSpacing: spacing
+
     ChartWrap {
-        color: "red"
+        color: grid.chartBackground
+
+        PhaseOffsetChart {
+           anchors.fill: parent
+           alignment: source
+           color: Material.color(Material.Red)
+       }
     }
 
     ChartWrap {
-        color: "blue"
+        color: grid.chartBackground
+
+    }
+
+    ChartWrap {
+        color: grid.chartBackground
+    }
+
+    ChartWrap {
+        color: grid.chartBackground
+
         SplChart {
             anchors.fill: parent
         }
     }
 
     ChartWrap {
-        color: "grey"
+        color: grid.chartBackground
     }
 
     ChartWrap {
-        color: "yellow"
-    }
-
-    ChartWrap {
-        color: "green"
-    }
-
-    ChartWrap {
-        color: "pink"
+        color: grid.chartBackground
     }
 }

@@ -21,7 +21,7 @@ GridLayout {
         indicators: false
         Layout.fillWidth: true
         value: alignment.audience.start.x
-        onValueChanged: alignment.audience.start.x = value
+        onValueChanged: alignment.audience.start.x = value;
     }
 
     Label {

@@ -2,7 +2,9 @@
 
 Loudspeaker::Loudspeaker(qreal x, qreal y, QObject *parent) : QObject(parent), m_x(x), m_y(y)
 {
-
+    connect(this, &Loudspeaker::xChanged, [this](){ emit changed(); });
+    connect(this, &Loudspeaker::yChanged, [this](){ emit changed(); });
+    connect(this, &Loudspeaker::levelChanged, [this](){ emit changed(); });
 }
 
 qreal Loudspeaker::x() const
@@ -12,7 +14,10 @@ qreal Loudspeaker::x() const
 
 void Loudspeaker::setX(const qreal &x)
 {
-    m_x = x;
+    if (!qFuzzyCompare(m_x, x)) {
+        m_x = x;
+        emit xChanged(m_x);
+    }
 }
 
 qreal Loudspeaker::y() const
@@ -22,7 +27,10 @@ qreal Loudspeaker::y() const
 
 void Loudspeaker::setY(const qreal &y)
 {
-    m_y = y;
+    if (!qFuzzyCompare(m_y, y)) {
+        m_y = y;
+        emit yChanged(m_y);
+    }
 }
 
 qreal Loudspeaker::level() const
@@ -32,7 +40,10 @@ qreal Loudspeaker::level() const
 
 void Loudspeaker::setLevel(const qreal &level)
 {
-    m_level = level;
+    if (!qFuzzyCompare(m_level, level)) {
+        m_level = level;
+        emit levelChanged(m_level);
+    }
 }
 
 qreal Loudspeaker::dB() const

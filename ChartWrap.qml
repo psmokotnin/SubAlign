@@ -27,10 +27,16 @@ Rectangle {
     }
 
     Behavior on Layout.preferredHeight {
-        NumberAnimation {duration: 500}
+        NumberAnimation {
+            duration: 500
+            easing.type: Easing.Linear
+        }
     }
 
     Behavior on Layout.preferredWidth {
-        NumberAnimation {duration: 500}
+        NumberAnimation {
+            duration: 500
+            easing.type: Easing.Linear
+        }
     }
 }

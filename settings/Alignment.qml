@@ -38,7 +38,8 @@ GridLayout {
         decimals: 0
         step: 1
         indicators: false
-        value:0
+        value:alignment.maxPhaseOffset
+        onValueChanged: alignment.maxPhaseOffset = value
         Layout.fillWidth: true
     }
 }

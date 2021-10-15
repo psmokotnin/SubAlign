@@ -31,6 +31,7 @@ signals:
     void xChanged(qreal);
     void yChanged(qreal);
     void levelChanged(qreal);
+    void changed();
 
 private:
     qreal m_x = 0,
