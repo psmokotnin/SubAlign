@@ -9,17 +9,9 @@ PhaseOffsetChart::PhaseOffsetChart(QQuickItem *parent) : ChartItem(parent)
 void PhaseOffsetChart::paintChart(QPainter *painter)
 {
     QPen linePen(m_color, 2);
-    painter->setRenderHints(QPainter::Antialiasing, true);
+    QPainterPath path;
 
-    QPainterPath path, clip;
-    auto frame = paddingRect();
-    clip.moveTo(frame.left(), frame.top());
-    clip.lineTo(frame.right(), frame.top());
-    clip.lineTo(frame.right(), frame.bottom());
-    clip.lineTo(frame.left(), frame.bottom());
-    clip.closeSubpath();
-
-    for (auto &&[x, phase] : m_alignment->phase()) {
+    for (auto &&[x, phase, spl] : m_alignment->phase()) {
         auto point = QPoint(
                          m_x.convert(x),
                          m_y.convert(phase)
@@ -32,7 +24,6 @@ void PhaseOffsetChart::paintChart(QPainter *painter)
     }
 
     painter->setPen(linePen);
-    painter->setClipPath(clip);
     painter->drawPath(path);
 }
 

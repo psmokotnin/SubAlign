@@ -16,6 +16,7 @@ GridLayout {
     rowSpacing: spacing
 
     ChartWrap {
+        id: phaseOffsetChart
         color: grid.chartBackground
 
         PhaseOffsetChart {
@@ -35,10 +36,16 @@ GridLayout {
     }
 
     ChartWrap {
+        id: splChart
         color: grid.chartBackground
 
         SplChart {
             anchors.fill: parent
+            alignment: source
+
+            mainsColor: Material.color(Material.Blue)
+            subwooferColor: Material.color(Material.Green)
+            sumColor: Material.color(Material.Red)
         }
     }
 

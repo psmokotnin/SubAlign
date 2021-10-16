@@ -18,10 +18,21 @@ class Alignment : public QObject
     Q_PROPERTY(Audience *audience READ audience CONSTANT)
     QML_ELEMENT
 
+    constexpr static const qreal ZERODB_DISSTANCE = 1.0;
+
 public:
     explicit Alignment(QObject *parent = nullptr);
-    using PhasePoint = std::pair<float, float>;
-    using PhaseData = std::vector<PhasePoint>;
+    struct AxisPoint {
+        qreal x;
+        qreal phase;
+
+        struct {
+            qreal mains;
+            qreal subwoofer;
+            qreal sum;
+        } spl;
+    };
+    using AxisData = std::vector<AxisPoint>;
 
     qreal maxPhaseOffset() const noexcept;
     void setMaxPhaseOffset(const qreal &maxPhaseOffset);
@@ -34,7 +45,7 @@ public:
     Loudspeaker *mains() noexcept;
     Loudspeaker *subwoofer() noexcept;
 
-    const PhaseData &phase() const;
+    const AxisData &phase() const;
 
 signals:
     void maxPhaseOffsetChanged(qreal);
@@ -44,7 +55,7 @@ signals:
 private:
     void update();
 
-    void updatePhase();
+    void updateOnax();
     qreal phase(qreal x) const noexcept;
 
     qreal m_maxPhaseOffset = 0;
@@ -55,7 +66,7 @@ private:
     Environment m_environment;
     Loudspeaker m_mains, m_subwoofer;
 
-    PhaseData m_phase;
+    AxisData m_axisData;
 };
 //QML_DECLARE_TYPE(Alignment)
 #endif // ALIGNMENT_H

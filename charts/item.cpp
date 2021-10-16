@@ -1,4 +1,6 @@
 #include "item.h"
+#include <QPainter>
+#include <QPainterPath>
 
 ChartItem::ChartItem(QQuickItem *parent) : QQuickPaintedItem(parent),
     m_alignment(nullptr), m_x(ChartAxis::Horizontal, this), m_y(ChartAxis::Vertical, this), m_padding()
@@ -11,6 +13,17 @@ ChartItem::ChartItem(QQuickItem *parent) : QQuickPaintedItem(parent),
 
 void ChartItem::paint(QPainter *painter)
 {
+    painter->setRenderHints(QPainter::Antialiasing, true);
+
+    QPainterPath clip;
+    auto frame = paddingRect();
+    clip.moveTo(frame.left(), frame.top());
+    clip.lineTo(frame.right(), frame.top());
+    clip.lineTo(frame.right(), frame.bottom());
+    clip.lineTo(frame.left(), frame.bottom());
+    clip.closeSubpath();
+    painter->setClipPath(clip);
+
     paintChart(painter);
 }
 
