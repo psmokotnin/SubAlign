@@ -95,8 +95,8 @@ qreal Alignment::calculateSPL(qreal x, qreal y, qreal z) const noexcept
     auto dt = delta / m_environment.speedOfSound();
     auto phase = dt * m_frequency * 360.;
 
-    auto mainsSPL = 20 * std::log10(ZERODB_DISSTANCE / mainsD);
-    auto subwooferSPL = 20 * std::log10(ZERODB_DISSTANCE / subsD);
+    auto mainsSPL = 20 * std::log10(ZERODB_DISSTANCE / mainsD) + m_mains.dB();
+    auto subwooferSPL = 20 * std::log10(ZERODB_DISSTANCE / subsD) + m_subwoofer.dB();
 
     phase -= m_phaseOffset - m_maxPhaseOffset;
     mainsSPL -= m_levelOffset;
@@ -153,19 +153,14 @@ void Alignment::updateOnax()
 
         auto phase = dt * m_frequency * 360.;
 
-        auto mainsSPL = 20 * std::log10(ZERODB_DISSTANCE / mainsD);
-        auto subwooferSPL = 20 * std::log10(ZERODB_DISSTANCE / subsD);
+        auto mainsSPL = 20 * std::log10(ZERODB_DISSTANCE / mainsD) + m_mains.dB();
+        auto subwooferSPL = 20 * std::log10(ZERODB_DISSTANCE / subsD) + m_subwoofer.dB();
 
         m_axisData[i] = {x, phase, {mainsSPL, subwooferSPL, 0}};
-        if (m_phaseOffset < phase) {
-            m_phaseOffset = phase;
-        }
-        if (m_levelOffset < mainsSPL) {
-            m_levelOffset = mainsSPL;
-        }
-        if (m_levelOffset < subwooferSPL) {
-            m_levelOffset = subwooferSPL;
-        }
+
+        m_phaseOffset = std::max(m_phaseOffset, phase);
+        m_levelOffset = std::max(m_levelOffset, mainsSPL);
+        m_levelOffset = std::max(m_levelOffset, subwooferSPL);
 
         x += m_accuracy;
         ++i;

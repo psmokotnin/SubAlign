@@ -54,7 +54,7 @@ void Loudspeaker::setLevel(const qreal &level) noexcept
 
 qreal Loudspeaker::dB() const
 {
-    return 20.0 * std::log(m_level);
+    return 20.0 * std::log10(m_level);
 }
 
 void Loudspeaker::setDb(qreal &value)
