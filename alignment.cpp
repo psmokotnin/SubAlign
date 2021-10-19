@@ -1,4 +1,5 @@
 #include "alignment.h"
+#include <complex>
 #include <QtDebug>
 
 Alignment::Alignment(QObject *parent) : QObject(parent),
@@ -76,6 +77,41 @@ const Alignment::AxisData &Alignment::phase() const
     return m_axisData;
 }
 
+qreal Alignment::calculateSPL(qreal x, qreal y, qreal z) const noexcept
+{
+    auto mainsD = std::sqrt(
+                      std::pow(x - m_mains.x(), 2) +
+                      std::pow(y - m_mains.y(), 2) +
+                      std::pow(z - m_mains.z(), 2)
+                  );
+
+    auto subsD = std::sqrt(
+                     std::pow(x - m_subwoofer.x(), 2) +
+                     std::pow(y - m_subwoofer.y(), 2) +
+                     std::pow(z - m_subwoofer.z(), 2)
+                 );
+
+    auto delta = subsD - mainsD;
+    auto dt = delta / m_environment.speedOfSound();
+    auto phase = dt * m_frequency * 360.;
+
+    auto mainsSPL = 20 * std::log10(ZERODB_DISSTANCE / mainsD);
+    auto subwooferSPL = 20 * std::log10(ZERODB_DISSTANCE / subsD);
+
+    phase -= m_phaseOffset - m_maxPhaseOffset;
+    mainsSPL -= m_levelOffset;
+    subwooferSPL -= m_levelOffset;
+
+    auto a = std::pow(10., mainsSPL / 20.);
+    auto b = std::pow(10., subwooferSPL / 20.);
+    auto alpha = M_PI * phase / 180;
+    std::complex<qreal> ca = {a, 0};
+    std::complex<qreal> cb = {b *std::cos(alpha), b *std::sin(alpha)};
+
+    auto cs = ca + cb;
+    return 20. * std::log10(std::abs(cs));
+}
+
 void Alignment::update()
 {
     updateOnax();
@@ -91,8 +127,8 @@ void Alignment::updateOnax()
     auto x = a.x();
 
     m_axisData.resize(points);
-    qreal phaseOffset = -std::numeric_limits<qreal>::infinity();
-    qreal levelOffset = -std::numeric_limits<qreal>::infinity();
+    m_phaseOffset = -std::numeric_limits<qreal>::infinity();
+    m_levelOffset = -std::numeric_limits<qreal>::infinity();
 
     auto i = 0;
     auto k = (b.y() - a.y()) / (b.x() - a.x());
@@ -121,28 +157,33 @@ void Alignment::updateOnax()
         auto subwooferSPL = 20 * std::log10(ZERODB_DISSTANCE / subsD);
 
         m_axisData[i] = {x, phase, {mainsSPL, subwooferSPL, 0}};
-        if (phaseOffset < phase) {
-            phaseOffset = phase;
+        if (m_phaseOffset < phase) {
+            m_phaseOffset = phase;
         }
-        if (levelOffset < mainsSPL) {
-            levelOffset = mainsSPL;
+        if (m_levelOffset < mainsSPL) {
+            m_levelOffset = mainsSPL;
         }
-        if (levelOffset < subwooferSPL) {
-            levelOffset = subwooferSPL;
+        if (m_levelOffset < subwooferSPL) {
+            m_levelOffset = subwooferSPL;
         }
 
         x += m_accuracy;
         ++i;
     }
+
     std::for_each(m_axisData.begin(), m_axisData.end(), [&](auto & el) {
-        el.phase -= phaseOffset - m_maxPhaseOffset;
-        el.spl.mains -= levelOffset;
-        el.spl.subwoofer -= levelOffset;
+        el.phase -= m_phaseOffset - m_maxPhaseOffset;
+        el.spl.mains -= m_levelOffset;
+        el.spl.subwoofer -= m_levelOffset;
 
         auto a = std::pow(10., el.spl.mains / 20.);
         auto b = std::pow(10., el.spl.subwoofer / 20.);
-        auto s = (a - b) + b * 2. * std::cos(M_PI * el.phase / 360);
-        el.spl.sum = 20. * std::log10(s);
+        auto alpha = M_PI * el.phase / 180;
+        std::complex<qreal> ca = {a, 0};
+        std::complex<qreal> cb = {b *std::cos(alpha), b *std::sin(alpha)};
+
+        auto cs = ca + cb;
+        el.spl.sum = 20. * std::log10(std::abs(cs));
     });
 }
 

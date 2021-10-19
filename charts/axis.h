@@ -9,30 +9,30 @@ class ChartAxis : public QQuickPaintedItem
     Q_OBJECT
 public:
     enum Direction {Vertical, Horizontal};
-    ChartAxis(Direction direction, QQuickItem *parent = Q_NULLPTR);
+    ChartAxis(Direction direction, const ChartPadding &newPadding, QQuickItem *parent = Q_NULLPTR);
 
-    void configure(float min, float max, unsigned int ticks = 0);
+    void configure(qreal min, qreal max, unsigned int ticks = 0);
     void configure(unsigned int ticks = 0);
     void paint(QPainter *painter) noexcept override;
-    QString format(float v);
-    float convert(float value) const;
+    QString format(qreal v);
+    qreal convert(qreal value) const;
+    qreal reverse(qreal value) const;
 
-    float min() const;
-    void setMin(float newMin);
+    qreal min() const;
+    void setMin(qreal newMin);
 
-    float max() const;
-    void setMax(float newMax);
+    qreal max() const;
+    void setMax(qreal newMax);
 
     Direction direction() const;
     void setDirection(Direction newDirection);
 
     const ChartPadding &padding() const;
-    void setPadding(const ChartPadding &newPadding);
 
-    float pwidth() const noexcept;
-    float pheight() const noexcept;
-    float widthf() const noexcept;
-    float heightf() const noexcept;
+    qreal pwidth() const noexcept;
+    qreal pheight() const noexcept;
+    qreal widthf() const noexcept;
+    qreal heightf() const noexcept;
 
 public slots:
     void updateWidth();
@@ -42,9 +42,9 @@ private:
     void generateLabels(unsigned int ticks);
 
     Direction m_direction;
-    ChartPadding m_padding;
-    float m_min, m_max, m_centralLabel;
-    std::vector<float> m_labels;
+    const ChartPadding &m_padding;
+    qreal m_min, m_max, m_centralLabel;
+    std::vector<qreal> m_labels;
 
 };
 

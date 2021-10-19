@@ -18,6 +18,8 @@ public:
     Alignment *alignment() const;
     void setAlignment(Alignment *newAlignment);
 
+    qreal innerWidth() const noexcept;
+    qreal innerHeight() const noexcept;
     QRectF paddingRect() const noexcept;
 
 signals:

@@ -19,7 +19,6 @@ void SplChart::paintChart(QPainter *painter)
         auto pointMains = QPoint(xPos, m_y.convert(spl.mains));
         auto pointSub   = QPoint(xPos, m_y.convert(spl.subwoofer));
         auto pointSum   = QPoint(xPos, m_y.convert(spl.sum));
-
         if (mains.elementCount()) {
             mains.lineTo(pointMains);
             subwoofer.lineTo(pointSub);

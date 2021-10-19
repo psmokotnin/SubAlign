@@ -41,6 +41,7 @@ HEADERS += \
     charts/item.h \
     charts/phaseoffset.h \
     charts/spl.h \
+    charts/splplane.h \
     environment.h \
     loudspeaker.h
 
@@ -51,6 +52,7 @@ SOURCES += \
         charts/item.cpp \
         charts/phaseoffset.cpp \
         charts/spl.cpp \
+        charts/splplane.cpp \
         environment.cpp \
         loudspeaker.cpp \
         main.cpp

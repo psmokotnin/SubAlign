@@ -46,6 +46,7 @@ public:
     Loudspeaker *subwoofer() noexcept;
 
     const AxisData &phase() const;
+    qreal calculateSPL(qreal x, qreal y, qreal z) const noexcept;
 
 signals:
     void maxPhaseOffsetChanged(qreal);
@@ -61,6 +62,8 @@ private:
     qreal m_maxPhaseOffset = 0;
     qreal m_frequency = 100;
     qreal m_accuracy = 0.01;
+
+    qreal m_phaseOffset, m_levelOffset;
 
     Audience m_audience;
     Environment m_environment;

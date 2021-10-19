@@ -1,8 +1,9 @@
 #include "axis.h"
 #include <QPainter>
 
-ChartAxis::ChartAxis(Direction direction, QQuickItem *parent) : QQuickPaintedItem(parent),
-    m_direction(direction), m_min(0), m_max(0), m_centralLabel(0), m_labels()
+ChartAxis::ChartAxis(Direction direction, const ChartPadding &newPadding,
+                     QQuickItem *parent) : QQuickPaintedItem(parent),
+    m_direction(direction), m_padding(newPadding), m_min(0), m_max(0), m_centralLabel(0), m_labels()
 {
     connect(parent, SIGNAL(widthChanged()), this, SLOT(updateWidth()));
     connect(parent, SIGNAL(heightChanged()), this, SLOT(updateHeight()));
@@ -22,7 +23,7 @@ void ChartAxis::updateHeight()
     setHeight(parentItem()->height());
 }
 
-void ChartAxis::configure(float min, float max, unsigned int ticks)
+void ChartAxis::configure(qreal min, qreal max, unsigned int ticks)
 {
     setMin(min);
     setMax(max);
@@ -46,8 +47,8 @@ void ChartAxis::paint(QPainter *painter) noexcept
 
     QPoint p1, p2;
     QRect textRect(0, 0, 50, 20), lastTextRect;
-    float t;
-    float size = (m_direction == Horizontal ? pwidth() : pheight());
+    qreal t;
+    qreal size = (m_direction == Horizontal ? pwidth() : pheight());
     int alignFlag = static_cast<int>(m_direction == Horizontal ?
                                      Qt::AlignTop | Qt::AlignCenter :
                                      Qt::AlignRight | Qt::AlignHCenter
@@ -59,7 +60,7 @@ void ChartAxis::paint(QPainter *painter) noexcept
         static_cast<int>(widthf()  - m_padding.left - m_padding.right ) + 1,
         static_cast<int>(heightf() - m_padding.top  - m_padding.bottom) + 1
     );
-    auto setPoints = [&](float value) {
+    auto setPoints = [&](qreal value) {
         t = size * (value - m_min) / (m_max - m_min);
 
         p1.setX(static_cast<int>(m_direction == Horizontal ? t + m_padding.left : m_padding.left));
@@ -69,7 +70,7 @@ void ChartAxis::paint(QPainter *painter) noexcept
                                  m_padding.bottom - t));
         p2.setY(static_cast<int>(m_direction == Horizontal ? m_padding.top : heightf() - m_padding.bottom - t));
     };
-    for_each(m_labels.begin(), m_labels.end(), [&](float & l) {
+    for_each(m_labels.begin(), m_labels.end(), [&](qreal & l) {
 
         setPoints(l);
         //do not draw lines out of padding
@@ -97,7 +98,7 @@ void ChartAxis::paint(QPainter *painter) noexcept
     });
 }
 
-QString ChartAxis::format(float v)
+QString ChartAxis::format(qreal v)
 {
     bool addK = false;
     if (v >= 1000.f) {
@@ -108,7 +109,7 @@ QString ChartAxis::format(float v)
     return QString::number(static_cast<double>(v)) + (addK ? "K" : "");
 }
 
-float ChartAxis::convert(float value) const
+qreal ChartAxis::convert(qreal value) const
 {
     auto scaled = (value - m_min) / (m_max - m_min);
 
@@ -118,23 +119,35 @@ float ChartAxis::convert(float value) const
     return height() - (pheight() * scaled + padding().bottom);
 }
 
-float ChartAxis::min() const
+qreal ChartAxis::reverse(qreal value) const
+{
+    qreal scaled;
+    if (m_direction == Horizontal) {
+        scaled = (value - padding().left) / pwidth();
+    } else {
+        scaled = (height() - value - padding().bottom) / pheight();
+    }
+
+    return scaled * (m_max - m_min) + m_min;
+}
+
+qreal ChartAxis::min() const
 {
     return m_min;
 }
 
-void ChartAxis::setMin(float newMin)
+void ChartAxis::setMin(qreal newMin)
 {
     m_min = newMin;
     update();
 }
 
-float ChartAxis::max() const
+qreal ChartAxis::max() const
 {
     return m_max;
 }
 
-void ChartAxis::setMax(float newMax)
+void ChartAxis::setMax(qreal newMax)
 {
     m_max = newMax;
     update();
@@ -154,7 +167,7 @@ void ChartAxis::setDirection(Direction newDirection)
 void ChartAxis::generateLabels(unsigned int ticks)
 {
     m_labels.clear();
-    float l, step;
+    qreal l, step;
 
     //make symetrical labels if _min and _max have different signs
     if (std::abs(m_min + m_max) < std::max(abs(m_min), std::abs(m_max))) {
@@ -182,27 +195,22 @@ const ChartPadding &ChartAxis::padding() const
     return m_padding;
 }
 
-void ChartAxis::setPadding(const ChartPadding &newPadding)
-{
-    m_padding = newPadding;
-}
-
-float ChartAxis::pwidth() const noexcept
+qreal ChartAxis::pwidth() const noexcept
 {
     return widthf()  - (m_padding.left + m_padding.right);
 }
 
-float ChartAxis::pheight() const noexcept
+qreal ChartAxis::pheight() const noexcept
 {
     return heightf() - (m_padding.top  + m_padding.bottom);
 }
 
-float ChartAxis::widthf() const noexcept
+qreal ChartAxis::widthf() const noexcept
 {
-    return static_cast<float>(width());
+    return static_cast<qreal>(width());
 }
 
-float ChartAxis::heightf() const noexcept
+qreal ChartAxis::heightf() const noexcept
 {
-    return static_cast<float>(height());
+    return static_cast<qreal>(height());
 }

@@ -3,11 +3,10 @@
 #include <QPainterPath>
 
 ChartItem::ChartItem(QQuickItem *parent) : QQuickPaintedItem(parent),
-    m_alignment(nullptr), m_x(ChartAxis::Horizontal, this), m_y(ChartAxis::Vertical, this), m_padding()
+    m_alignment(nullptr), m_x(ChartAxis::Horizontal, m_padding, this), m_y(ChartAxis::Vertical, m_padding, this),
+    m_padding()
 {
     setFlag(QQuickItem::ItemHasContents);
-    m_x.setPadding(m_padding);
-    m_y.setPadding(m_padding);
     setZ(z() + 1);
 }
 
@@ -46,12 +45,22 @@ void ChartItem::setAlignment(Alignment *newAlignment)
     update();
 }
 
+qreal ChartItem::innerWidth() const noexcept
+{
+    return width() - m_padding.left - m_padding.right;
+}
+
+qreal ChartItem::innerHeight() const noexcept
+{
+    return height() - m_padding.top - m_padding.bottom;
+}
+
 QRectF ChartItem::paddingRect() const noexcept
 {
     return QRectF{
         m_padding.left,
         m_padding.bottom,
-        width() - m_padding.left - m_padding.right,
-        height() - m_padding.top - m_padding.bottom
+        innerWidth(),
+        innerHeight()
     };
 }

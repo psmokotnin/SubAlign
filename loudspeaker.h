@@ -15,14 +15,19 @@ class Loudspeaker : public QObject
 public:
     explicit Loudspeaker(qreal x = 0, qreal y = 0, QObject *parent = nullptr);
 
-    qreal x() const;
-    void setX(const qreal &x);
+    qreal x() const noexcept;
+    void setX(const qreal &x) noexcept;
 
-    qreal y() const;
-    void setY(const qreal &y);
+    qreal y() const noexcept;
+    void setY(const qreal &y) noexcept;
 
-    qreal level() const;
-    void setLevel(const qreal &level);
+    constexpr qreal z() const noexcept
+    {
+        return 0.;
+    }
+
+    qreal level() const noexcept;
+    void setLevel(const qreal &level) noexcept;
 
     qreal dB() const;
     void setDb(qreal &value);

@@ -27,12 +27,25 @@ GridLayout {
     }
 
     ChartWrap {
+        id: splPlane
         color: grid.chartBackground
 
+        SplPlaneChart {
+            anchors.fill: parent
+            alignment: source
+            plane: SplPlaneChart.XY
+        }
     }
 
     ChartWrap {
+        id: splSection
         color: grid.chartBackground
+
+        SplPlaneChart {
+            anchors.fill: parent
+            alignment: source
+            plane: SplPlaneChart.XZ
+        }
     }
 
     ChartWrap {
