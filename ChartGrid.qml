@@ -18,9 +18,11 @@ GridLayout {
     ChartWrap {
         id: phaseOffsetChart
         color: grid.chartBackground
+        title: "Phase offset"
 
         PhaseOffsetChart {
            anchors.fill: parent
+           anchors.topMargin: 20
            alignment: source
            color: Material.color(Material.Red)
        }
@@ -29,9 +31,11 @@ GridLayout {
     ChartWrap {
         id: splPlane
         color: grid.chartBackground
+        title: "SPL Plane"
 
         SplPlaneChart {
             anchors.fill: parent
+            anchors.topMargin: 20
             alignment: source
             plane: SplPlaneChart.XY
         }
@@ -40,9 +44,11 @@ GridLayout {
     ChartWrap {
         id: splSection
         color: grid.chartBackground
+        title: "SPL Section"
 
         SplPlaneChart {
             anchors.fill: parent
+            anchors.topMargin: 20
             alignment: source
             plane: SplPlaneChart.XZ
         }
@@ -51,11 +57,12 @@ GridLayout {
     ChartWrap {
         id: splChart
         color: grid.chartBackground
+        title: "SPL"
 
         SplChart {
             anchors.fill: parent
+            anchors.topMargin: 20
             alignment: source
-
             mainsColor: Material.color(Material.Blue)
             subwooferColor: Material.color(Material.Green)
             sumColor: Material.color(Material.Red)
@@ -64,9 +71,11 @@ GridLayout {
 
     ChartWrap {
         color: grid.chartBackground
+        title: "Relative Level Difference Plane"
 
         RelativeLevelChart {
             anchors.fill: parent
+            anchors.topMargin: 20
             alignment: source
             plane: RelativeLevelChart.XY
         }
@@ -74,9 +83,11 @@ GridLayout {
 
     ChartWrap {
         color: grid.chartBackground
+        title: "Relative Level Difference Section"
 
         RelativeLevelChart {
             anchors.fill: parent
+            anchors.topMargin: 20
             alignment: source
             plane: RelativeLevelChart.XZ
         }
