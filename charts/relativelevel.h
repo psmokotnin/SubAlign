@@ -1,22 +1,21 @@
-#ifndef SPLPLANECHART_H
-#define SPLPLANECHART_H
+#ifndef RELATIVELEVELCHART_H
+#define RELATIVELEVELCHART_H
 
 #include "item.h"
 
-class SplPlaneChart : public ChartItem
+class RelativeLevelChart : public ChartItem
 {
 public:
     enum Plane {XY, XZ};
-
     Q_OBJECT
     Q_PROPERTY(Plane plane READ plane WRITE setPlane NOTIFY planeChanged)
     QML_ELEMENT
     Q_ENUM(Plane)
 
 public:
-    SplPlaneChart(QQuickItem *parent = Q_NULLPTR);
+    RelativeLevelChart(QQuickItem *parent = Q_NULLPTR);
 
-    SplPlaneChart::Plane plane() const noexcept;
+    RelativeLevelChart::Plane plane() const noexcept;
     void setPlane(Plane newPlane) noexcept;
 
 signals:
@@ -30,4 +29,4 @@ private:
     Plane m_plane;
 };
 
-#endif // SPLPLANECHART_H
+#endif // RELATIVELEVELCHART_H

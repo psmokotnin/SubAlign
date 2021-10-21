@@ -77,7 +77,7 @@ const Alignment::AxisData &Alignment::phase() const
     return m_axisData;
 }
 
-qreal Alignment::calculateSPL(qreal x, qreal y, qreal z) const noexcept
+Alignment::DataPoint Alignment::calculate(qreal x, qreal y, qreal z) const noexcept
 {
     auto mainsD = std::sqrt(
                       std::pow(x - m_mains.x(), 2) +
@@ -109,7 +109,37 @@ qreal Alignment::calculateSPL(qreal x, qreal y, qreal z) const noexcept
     std::complex<qreal> cb = {b *std::cos(alpha), b *std::sin(alpha)};
 
     auto cs = ca + cb;
-    return 20. * std::log10(std::abs(cs));
+    return {
+        {
+            mainsSPL,
+            subwooferSPL,
+            20. * std::log10(std::abs(cs))
+        },
+        phase
+    };
+}
+
+std::pair<Alignment::LevelZone, Alignment::PhaseZone> Alignment::zone(qreal x, qreal y, qreal z) const noexcept
+{
+    std::pair<Alignment::LevelZone, Alignment::PhaseZone> zones;
+    auto data = calculate(x, y, z);
+
+    auto diff = std::abs(data.spl.mains - data.spl.subwoofer);
+    if (diff < 4) {
+        zones.first = LevelZone::Combing;
+    } else if (diff < 10) {
+        zones.first = LevelZone::Combining;
+    } else {
+        zones.first = LevelZone::Isolation;
+    }
+
+    if (std::abs(data.phase) < 120) {
+        zones.second = PhaseZone::Coupling;
+    } else {
+        zones.second = PhaseZone::Cancellation;
+    }
+
+    return zones;
 }
 
 void Alignment::update()

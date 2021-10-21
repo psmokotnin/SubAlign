@@ -64,9 +64,21 @@ GridLayout {
 
     ChartWrap {
         color: grid.chartBackground
+
+        RelativeLevelChart {
+            anchors.fill: parent
+            alignment: source
+            plane: RelativeLevelChart.XY
+        }
     }
 
     ChartWrap {
         color: grid.chartBackground
+
+        RelativeLevelChart {
+            anchors.fill: parent
+            alignment: source
+            plane: RelativeLevelChart.XZ
+        }
     }
 }

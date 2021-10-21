@@ -40,6 +40,7 @@ HEADERS += \
     charts/padding.h \
     charts/item.h \
     charts/phaseoffset.h \
+    charts/relativelevel.h \
     charts/spl.h \
     charts/splplane.h \
     environment.h \
@@ -51,6 +52,7 @@ SOURCES += \
         charts/axis.cpp \
         charts/item.cpp \
         charts/phaseoffset.cpp \
+        charts/relativelevel.cpp \
         charts/spl.cpp \
         charts/splplane.cpp \
         environment.cpp \

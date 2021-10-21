@@ -33,6 +33,23 @@ public:
         } spl;
     };
     using AxisData = std::vector<AxisPoint>;
+    struct DataPoint {
+        struct {
+            qreal mains;
+            qreal subwoofer;
+            qreal sum;
+        } spl;
+        qreal phase;
+    };
+    enum LevelZone {
+        Combing         = 0b001,
+        Combining       = 0b010,
+        Isolation       = 0b100
+    };
+    enum PhaseZone {
+        Coupling        = 0b01000,
+        Cancellation    = 0b10000
+    };
 
     qreal maxPhaseOffset() const noexcept;
     void setMaxPhaseOffset(const qreal &maxPhaseOffset);
@@ -46,7 +63,8 @@ public:
     Loudspeaker *subwoofer() noexcept;
 
     const AxisData &phase() const;
-    qreal calculateSPL(qreal x, qreal y, qreal z) const noexcept;
+    DataPoint calculate(qreal x, qreal y, qreal z) const noexcept;
+    std::pair<LevelZone, PhaseZone> zone(qreal x, qreal y, qreal z) const noexcept;
 
 signals:
     void maxPhaseOffsetChanged(qreal);

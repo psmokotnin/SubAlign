@@ -1,33 +1,23 @@
-#include "splplane.h"
+#include "relativelevel.h"
 #include <QImage>
 #include <QPainter>
 
-SplPlaneChart::SplPlaneChart(QQuickItem *parent) : ChartItem(parent), m_plane(XY)
+RelativeLevelChart::RelativeLevelChart(QQuickItem *parent) : ChartItem(parent), m_plane(XY)
 {
     setFlag(QQuickItem::ItemHasContents);
-    //m_padding.right = 50;
 }
-
-void SplPlaneChart::paintChart(QPainter *painter)
+void RelativeLevelChart::paintChart(QPainter *painter)
 {
     QImage image(innerWidth(), innerHeight(), QImage::Format_ARGB32);
 
     static std::vector<QColor> colors = {
-        "#982018",  //0
-        "#E83626",  //3
-        "#E96233",  //6
-        "#F2AB4B",  //9
-        "#FFFD6A",  //12
-        "#DDFB68",  //15
-        "#A4FA72",  //18
-        "#82FAAF",  //21
-        "#78FBFD",  //24
-        "#357BEC",  //27
-        "#0634E8",  //30
-        "#001FE6",  //33
-        "#0016B5",  //36
-        "#000867"   //39
+        "#EB341C", //red
+        "#FBFB54", //yellow
+        "#357C24", //green
 
+        "#CCEB341C", //red
+        "#CCFBFB54", //yellow
+        "#CC357C24", //green
     };
     auto const &a = m_alignment->audience()->start();
     auto const &b = m_alignment->audience()->stop();
@@ -41,23 +31,38 @@ void SplPlaneChart::paintChart(QPainter *painter)
             auto y = (m_plane == XY ? k * x + c : m_y.reverse(imageY + m_padding.top));
             auto z = (m_plane == XY ? m_y.reverse(imageY + m_padding.top) : 0);
 
-            auto data = m_alignment->calculate(x, y, z);
-            auto index = std::floor(-data.spl.sum / 3.);
-            if (index < 0) {
-                index = 0;
-            }
-            if (index >= colors.size()) {
-                index = colors.size() - 1;
+            auto zone = m_alignment->zone(x, y, z);
+            QColor color;
+            switch (zone.first) {
+            case Alignment::LevelZone::Combing:
+                color = colors[0];
+                break;
+            case Alignment::LevelZone::Combining:
+                color = colors[1];
+                break;
+            case Alignment::LevelZone::Isolation:
+                color = colors[2];
+                break;
+                break;
             }
 
-            image.setPixelColor(imageX, imageY, colors[index]);
+            if (zone.second == Alignment::PhaseZone::Coupling &&
+                    (
+                        (imageX % 8 >= 4 && imageY % 8 >= 4) ||
+                        (imageX % 8 < 4 && imageY % 8 < 4)
+                    )
+               ) {
+                color = QColor("black");
+            }
+
+            image.setPixelColor(imageX, imageY, color);
         }
     }
 
     painter->drawImage(paddingRect(), image);
 }
 
-void SplPlaneChart::applyAlignment()
+void RelativeLevelChart::applyAlignment()
 {
     if (m_alignment) {
         auto delta = m_alignment->audience()->stop().x() - m_alignment->audience()->start().x();
@@ -85,12 +90,12 @@ void SplPlaneChart::applyAlignment()
     }
 }
 
-SplPlaneChart::Plane SplPlaneChart::plane() const noexcept
+RelativeLevelChart::Plane RelativeLevelChart::plane() const noexcept
 {
     return m_plane;
 }
 
-void SplPlaneChart::setPlane(Plane newPlane) noexcept
+void RelativeLevelChart::setPlane(Plane newPlane) noexcept
 {
     if (m_plane == newPlane)
         return;
