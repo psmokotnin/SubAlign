@@ -92,4 +92,59 @@ GridLayout {
             plane: RelativeLevelChart.XZ
         }
     }
+
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredWidth: Layout.columnSpan
+        Layout.preferredHeight: 50
+        clip: true
+        color: chartBackground
+
+        RowLayout {
+            anchors.fill: parent
+
+            Image {
+                source: "qrc:/images/resources/PavelLogo.png"
+                Layout.preferredHeight: 40
+                Layout.preferredWidth: 40
+                Layout.margins: 5
+            }
+
+            Text {
+                textFormat: Text.RichText
+                onLinkActivated: Qt.openUrlExternally(link)
+                text: qsTr(
+                        "developed by <a style='color:%1' href=\"https://opensoundmeter.com\">Pavel Smokotnin</a>"
+                    ).arg(Material.accentColor)
+            }
+        }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredWidth: Layout.columnSpan
+        Layout.preferredHeight: 50
+        clip: true
+        color: chartBackground
+
+        RowLayout {
+            anchors.fill: parent
+
+            Image {
+                source: "qrc:/images/resources/MerlijnLogo.png"
+                Layout.preferredHeight: 40
+                Layout.preferredWidth: 40
+                Layout.margins: 5
+            }
+
+            Text {
+                textFormat: Text.RichText
+                onLinkActivated: Qt.openUrlExternally(link)
+                text: qsTr(
+                        "Original calculator was created<br/>
+                        by <a style='color:%1' href=\"https://www.merlijnvanveen.nl\">Merlijn Van Veen</a>"
+                    ).arg(Material.accentColor)
+            }
+        }
+    }
 }
