@@ -1,7 +1,8 @@
 import QtQuick 2.0
+import QtQml.Models 2.2
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.15
-import QtQml.Models 2.2
+import QtQuick.Controls.Material 2.12
 
 import "settings" as Settings
 
@@ -18,11 +19,13 @@ Item {
         ListElement {
             title: qsTr("Mains")
             component: "mainsSettings"
+            materialColor: Material.Blue
         }
 
         ListElement {
             title: qsTr("Subwoofer")
             component: "subwooferSettings"
+            materialColor: Material.Green
         }
 
         ListElement {
@@ -33,6 +36,12 @@ Item {
         ListElement {
             title: qsTr("Environment")
             component: "environmentSettings"
+        }
+
+        ListElement {
+            title: qsTr("Legend")
+            component: "legend"
+            opened: true
         }
     }
 
@@ -62,12 +71,17 @@ Item {
     }
 
     Component {
+        id: legend
+        Legend {}
+    }
+
+    Component {
         id: delegateComponent
 
         ColumnLayout {
             anchors.left: parent.left
             anchors.right: parent.right
-            property bool opened: false
+            property bool opened: (model.opened ? model.opened : false)
 
             Label {
                 text: model.title
@@ -76,6 +90,7 @@ Item {
                 horizontalAlignment: Qt.AlignHCenter
                 Layout.fillWidth: true
                 Layout.topMargin: 5
+                color: (model.materialColor ? Material.color(model.materialColor) : "")
 
                 MouseArea {
                     anchors.fill: parent
@@ -102,6 +117,7 @@ Item {
                          case "subwooferSettings": return subwooferSettings;
                          case "mainsSettings": return mainsSettings;
                          case "alignmentSettings": return alignmentSettings;
+                         case "legend": return legend;
                          default: console.error("unknown component", model.component);
                     }
                 }

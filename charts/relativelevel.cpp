@@ -14,10 +14,6 @@ void RelativeLevelChart::paintChart(QPainter *painter)
         "#EB341C", //red
         "#FBFB54", //yellow
         "#357C24", //green
-
-        "#CCEB341C", //red
-        "#CCFBFB54", //yellow
-        "#CC357C24", //green
     };
     auto const &a = m_alignment->audience()->start();
     auto const &b = m_alignment->audience()->stop();

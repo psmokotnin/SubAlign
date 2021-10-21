@@ -13,20 +13,21 @@ void SplPlaneChart::paintChart(QPainter *painter)
     QImage image(innerWidth(), innerHeight(), QImage::Format_ARGB32);
 
     static std::vector<QColor> colors = {
-        "#982018",  //0
-        "#E83626",  //3
-        "#E96233",  //6
-        "#F2AB4B",  //9
-        "#FFFD6A",  //12
-        "#DDFB68",  //15
-        "#A4FA72",  //18
-        "#82FAAF",  //21
-        "#78FBFD",  //24
-        "#357BEC",  //27
-        "#0634E8",  //30
-        "#001FE6",  //33
-        "#0016B5",  //36
-        "#000867"   //39
+        "#FFFFFF",  //+ .. 0
+        "#982018",  //-0 -3
+        "#E83626",  //-3
+        "#E96233",  //-6
+        "#F2AB4B",  //-9
+        "#FFFD6A",  //-12
+        "#DDFB68",  //-15
+        "#A4FA72",  //-18
+        "#82FAAF",  //-21
+        "#78FBFD",  //-24
+        "#357BEC",  //-27
+        "#0634E8",  //-30
+        "#001FE6",  //-33
+        "#0016B5",  //-36
+        "#000867"   //-39 .. -42
 
     };
     auto const &a = m_alignment->audience()->start();
@@ -42,7 +43,7 @@ void SplPlaneChart::paintChart(QPainter *painter)
             auto z = (m_plane == XY ? m_y.reverse(imageY + m_padding.top) : 0);
 
             auto data = m_alignment->calculate(x, y, z);
-            auto index = std::floor(-data.spl.sum / 3.);
+            auto index = std::ceil(-data.spl.sum / 3.);
             if (index < 0) {
                 index = 0;
             }

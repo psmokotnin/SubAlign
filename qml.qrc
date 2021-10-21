@@ -11,5 +11,6 @@
         <file>settings/Environment.qml</file>
         <file>ChartGrid.qml</file>
         <file>ChartWrap.qml</file>
+        <file>Legend.qml</file>
     </qresource>
 </RCC>
