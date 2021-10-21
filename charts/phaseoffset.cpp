@@ -8,8 +8,10 @@ PhaseOffsetChart::PhaseOffsetChart(QQuickItem *parent) : ChartItem(parent)
 
 void PhaseOffsetChart::paintChart(QPainter *painter)
 {
+    qreal lastPhase = NAN;
     QPen linePen(m_color, 2);
     QPainterPath path;
+    QPoint xo;
 
     for (auto &&[x, phase, spl] : m_alignment->phase()) {
         auto point = QPoint(
@@ -21,10 +23,32 @@ void PhaseOffsetChart::paintChart(QPainter *painter)
         } else {
             path.moveTo(point);
         }
+
+        if (std::isnan(lastPhase)) {
+            lastPhase = phase;
+        }
+        if (lastPhase * phase <= 0.1) {
+            xo = point;
+        }
+        lastPhase = phase;
     }
 
     painter->setPen(linePen);
     painter->drawPath(path);
+
+    if (!xo.isNull()) {
+        painter->setBrush({"white"});
+        painter->drawEllipse(xo, 10, 10);
+
+        auto delta = std::hypot(10., 10.) / 2.;
+        path.clear();
+        path.moveTo(xo + QPoint(-delta, -delta));
+        path.lineTo(xo + QPoint(delta, delta));
+        path.moveTo(xo + QPoint(-delta, delta));
+        path.lineTo(xo + QPoint(delta, -delta));
+        painter->drawPath(path);
+    }
+    setXo(xo);
 }
 
 void PhaseOffsetChart::applyAlignment()
@@ -45,6 +69,19 @@ void PhaseOffsetChart::applyAlignment()
             m_x.configure(10);
         });
     }
+}
+
+QPoint PhaseOffsetChart::xo() const
+{
+    return m_xo;
+}
+
+void PhaseOffsetChart::setXo(QPoint newXo)
+{
+    if (m_xo == newXo)
+        return;
+    m_xo = newXo;
+    emit xoChanged();
 }
 
 const QColor &PhaseOffsetChart::color() const
