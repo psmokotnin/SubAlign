@@ -28,6 +28,7 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
+        acceptedButtons: Qt.RightButton
         onClicked: {
             if (parent.opened) {
                 parent.z = 1;

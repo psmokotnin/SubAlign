@@ -3,7 +3,7 @@
 
 ChartAxis::ChartAxis(Direction direction, const ChartPadding &newPadding,
                      QQuickItem *parent) : QQuickPaintedItem(parent),
-    m_direction(direction), m_padding(newPadding), m_min(0), m_max(0), m_centralLabel(0), m_labels()
+    m_direction(direction), m_padding(newPadding), m_min(0), m_max(0), m_centralLabel(0), m_labels(), m_unit()
 {
     connect(parent, SIGNAL(widthChanged()), this, SLOT(updateWidth()));
     connect(parent, SIGNAL(heightChanged()), this, SLOT(updateHeight()));
@@ -188,6 +188,16 @@ void ChartAxis::generateLabels(unsigned int ticks)
             l += step;
         }
     }
+}
+
+const QString &ChartAxis::unit() const
+{
+    return m_unit;
+}
+
+void ChartAxis::setUnit(QString unit) noexcept
+{
+    m_unit = unit;
 }
 
 const ChartPadding &ChartAxis::padding() const

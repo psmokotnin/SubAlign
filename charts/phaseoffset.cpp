@@ -4,6 +4,9 @@
 
 PhaseOffsetChart::PhaseOffsetChart(QQuickItem *parent) : ChartItem(parent)
 {
+    m_x.setUnit("m");
+    m_y.setUnit("˚");
+    m_unit = "˚";
 }
 
 void PhaseOffsetChart::paintChart(QPainter *painter)
@@ -37,6 +40,8 @@ void PhaseOffsetChart::paintChart(QPainter *painter)
     painter->drawPath(path);
 
     if (!xo.isNull()) {
+        xo.setY(m_y.convert(0));
+
         painter->setBrush({"white"});
         painter->drawEllipse(xo, 10, 10);
 
@@ -48,7 +53,7 @@ void PhaseOffsetChart::paintChart(QPainter *painter)
         path.lineTo(xo + QPoint(delta, -delta));
         painter->drawPath(path);
     }
-    setXo(xo);
+    setXo(m_x.reverse(xo.x()));
 }
 
 void PhaseOffsetChart::applyAlignment()
@@ -71,17 +76,26 @@ void PhaseOffsetChart::applyAlignment()
     }
 }
 
-QPoint PhaseOffsetChart::xo() const
+qreal PhaseOffsetChart::xo() const
 {
     return m_xo;
 }
 
-void PhaseOffsetChart::setXo(QPoint newXo)
+void PhaseOffsetChart::setXo(qreal newXo)
 {
-    if (m_xo == newXo)
+    if (qFuzzyCompare(m_xo, newXo)) {
         return;
+    }
     m_xo = newXo;
     emit xoChanged();
+}
+
+QString PhaseOffsetChart::value(QPoint position) const noexcept
+{
+    auto x = m_x.reverse(position.x());
+    auto y = m_alignment->yOnAxis(x);
+    auto dataPoint = m_alignment->calculate(x, y, 0);
+    return QString::number(dataPoint.phase, 'f', 0);
 }
 
 const QColor &PhaseOffsetChart::color() const

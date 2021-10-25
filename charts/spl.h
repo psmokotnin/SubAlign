@@ -23,8 +23,9 @@ public:
     const QColor &mainsColor() const;
     void setMainsColor(const QColor &newMainsColor);
 
-signals:
+    Q_INVOKABLE QString value(QPoint position) const noexcept override;
 
+signals:
     void sumColorChanged();
     void subwooferColorChanged();
     void mainsColorChanged();

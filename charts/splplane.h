@@ -19,6 +19,8 @@ public:
     SplPlaneChart::Plane plane() const noexcept;
     void setPlane(Plane newPlane) noexcept;
 
+    Q_INVOKABLE QString value(QPoint position) const noexcept override;
+
 signals:
     void planeChanged();
 

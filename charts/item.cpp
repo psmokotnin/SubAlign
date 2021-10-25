@@ -4,7 +4,7 @@
 
 ChartItem::ChartItem(QQuickItem *parent) : QQuickPaintedItem(parent),
     m_alignment(nullptr), m_x(ChartAxis::Horizontal, m_padding, this), m_y(ChartAxis::Vertical, m_padding, this),
-    m_padding()
+    m_padding(), m_unit()
 {
     setFlag(QQuickItem::ItemHasContents);
     setZ(z() + 1);
@@ -63,4 +63,37 @@ QRectF ChartItem::paddingRect() const noexcept
         innerWidth(),
         innerHeight()
     };
+}
+
+QPointF ChartItem::point(QPoint position) const noexcept
+{
+    auto rect = paddingRect();
+    if (!rect.contains(position)) {
+        return {NAN, NAN};
+    }
+    return {
+        m_x.reverse(position.x()),
+        m_y.reverse(position.y()),
+    };
+}
+
+QString ChartItem::value(QPoint position) const noexcept
+{
+    Q_UNUSED(position);
+    return {};
+}
+
+ChartAxis *ChartItem::x() noexcept
+{
+    return &m_x;
+}
+
+ChartAxis *ChartItem::y() noexcept
+{
+    return &m_y;
+}
+
+const QString &ChartItem::unit() const
+{
+    return m_unit;
 }

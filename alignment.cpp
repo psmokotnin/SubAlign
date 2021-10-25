@@ -24,6 +24,16 @@ Alignment::Alignment(QObject *parent) : QObject(parent),
     update();
 }
 
+qreal Alignment::yOnAxis(qreal x) const noexcept
+{
+    auto const &a = m_audience.start();
+    auto const &b = m_audience.stop();
+    auto k = (b.y() - a.y()) / (b.x() - a.x());
+    auto c = a.y() - a.x() * k;
+
+    return k * x + c;
+}
+
 qreal Alignment::maxPhaseOffset() const noexcept
 {
     return m_maxPhaseOffset;
@@ -128,7 +138,7 @@ std::pair<Alignment::LevelZone, Alignment::PhaseZone> Alignment::zone(qreal x, q
     if (diff < 4) {
         zones.first = LevelZone::Combing;
     } else if (diff < 10) {
-        zones.first = LevelZone::Combining;
+        zones.first = LevelZone::Transition;
     } else {
         zones.first = LevelZone::Isolation;
     }

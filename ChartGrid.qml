@@ -1,4 +1,5 @@
 import QtQuick 2.12
+import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Controls.Material 2.12
 import SubAlign 1.0
@@ -15,16 +16,88 @@ GridLayout {
     columnSpacing: spacing
     rowSpacing: spacing
 
+    Rectangle {
+        Layout.columnSpan: 3
+        Layout.preferredHeight: 50
+        Layout.fillWidth: true
+        color: chartBackground
+
+        RowLayout {
+            id: cursorRow
+            readonly property int itemWidth : (width - spacing * 3) / 4
+
+            anchors.fill: parent
+            spacing: 0
+
+            Text {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: (parent.width - grid.spacing * 2) / 3
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+
+                text: qsTr("XO: %1").arg(phaseOffsetChart.xo.toFixed(2))
+                color: Material.color(Material.Red)
+                font.bold: true
+            }
+
+            Rectangle {
+                Layout.preferredWidth: grid.spacing
+            }
+
+            Text {
+                id: cursorX
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: (parent.width - grid.spacing * 2) / 6
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignRight
+                rightPadding: 5
+            }
+
+            Text {
+                id: cursorY
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: (parent.width - grid.spacing * 2) / 6
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignLeft
+                leftPadding: 5
+            }
+
+            Rectangle {
+                Layout.preferredWidth: grid.spacing
+            }
+
+            Text {
+                id: cursorZ
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: (parent.width - grid.spacing * 2) / 3
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                color: Material.color(Material.Red)
+                font.bold: true
+            }
+        }
+    }
+
     ChartWrap {
-        id: phaseOffsetChart
         color: grid.chartBackground
         title: "Phase offset"
 
         PhaseOffsetChart {
-           anchors.fill: parent
-           anchors.topMargin: 20
-           alignment: source
-           color: Material.color(Material.Red)
+            id: phaseOffsetChart
+            anchors.fill: parent
+            anchors.topMargin: 20
+            alignment: source
+            color: Material.color(Material.Red)
+
+            ChartMouse {
+                xItem: cursorX
+                yItem: cursorY
+                zItem: cursorZ
+            }
        }
     }
 
@@ -38,6 +111,12 @@ GridLayout {
             anchors.topMargin: 20
             alignment: source
             plane: SplPlaneChart.XY
+
+            ChartMouse {
+                xItem: cursorX
+                yItem: cursorY
+                zItem: cursorZ
+            }
         }
     }
 
@@ -51,6 +130,12 @@ GridLayout {
             anchors.topMargin: 20
             alignment: source
             plane: SplPlaneChart.XZ
+
+            ChartMouse {
+                xItem: cursorX
+                yItem: cursorY
+                zItem: cursorZ
+            }
         }
     }
 
@@ -66,6 +151,12 @@ GridLayout {
             mainsColor: Material.color(Material.Blue)
             subwooferColor: Material.color(Material.Green)
             sumColor: Material.color(Material.Red)
+
+            ChartMouse {
+                xItem: cursorX
+                yItem: cursorY
+                zItem: cursorZ
+            }
         }
     }
 
@@ -78,6 +169,12 @@ GridLayout {
             anchors.topMargin: 20
             alignment: source
             plane: RelativeLevelChart.XY
+
+            ChartMouse {
+                xItem: cursorX
+                yItem: cursorY
+                zItem: cursorZ
+            }
         }
     }
 
@@ -90,6 +187,12 @@ GridLayout {
             anchors.topMargin: 20
             alignment: source
             plane: RelativeLevelChart.XZ
+
+            ChartMouse {
+                xItem: cursorX
+                yItem: cursorY
+                zItem: cursorZ
+            }
         }
     }
 
@@ -114,7 +217,7 @@ GridLayout {
                 textFormat: Text.RichText
                 onLinkActivated: Qt.openUrlExternally(link)
                 text: qsTr(
-                        "developed by <a style='color:%1' href=\"https://opensoundmeter.com\">Pavel Smokotnin</a>"
+                        "<a style='color:%1' href=\"https://opensoundmeter.com\">Pavel Smokotnin</a>"
                     ).arg(Material.accentColor)
             }
         }
@@ -146,5 +249,24 @@ GridLayout {
                     ).arg(Material.accentColor)
             }
         }
+    }
+
+    Rectangle {
+        Layout.fillWidth: true
+        Layout.preferredWidth: Layout.columnSpan
+        Layout.preferredHeight: 50
+        clip: true
+        color: chartBackground
+
+            Text {
+                anchors.fill: parent
+                textFormat: Text.RichText
+                onLinkActivated: Qt.openUrlExternally(link)
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                text: qsTr(
+                        "<a style='color:%1' href=\"https://www.merlijnvanveen.nl/en/calculators\">more calculators</a>"
+                    ).arg(Material.accentColor)
+            }
     }
 }

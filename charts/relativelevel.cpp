@@ -5,6 +5,9 @@
 RelativeLevelChart::RelativeLevelChart(QQuickItem *parent) : ChartItem(parent), m_plane(XY)
 {
     setFlag(QQuickItem::ItemHasContents);
+    m_x.setUnit("m");
+    m_y.setUnit("dB");
+    m_unit = "";
 }
 void RelativeLevelChart::paintChart(QPainter *painter)
 {
@@ -33,7 +36,7 @@ void RelativeLevelChart::paintChart(QPainter *painter)
             case Alignment::LevelZone::Combing:
                 color = colors[0];
                 break;
-            case Alignment::LevelZone::Combining:
+            case Alignment::LevelZone::Transition:
                 color = colors[1];
                 break;
             case Alignment::LevelZone::Isolation:
@@ -97,4 +100,22 @@ void RelativeLevelChart::setPlane(Plane newPlane) noexcept
         return;
     m_plane = newPlane;
     emit planeChanged();
+}
+
+QString RelativeLevelChart::value(QPoint position) const noexcept
+{
+    auto const &a = m_alignment->audience()->start();
+    auto const &b = m_alignment->audience()->stop();
+    auto k = (b.y() - a.y()) / (b.x() - a.x());
+    auto c = a.y() - a.x() * k;
+
+    auto x = m_x.reverse(position.x());
+    auto y = (m_plane == XY ? k * x + c : m_y.reverse(position.y()));
+    auto z = (m_plane == XY ? m_y.reverse(position.y()) : 0);
+    auto zone = m_alignment->zone(x, y, z);
+
+    QMetaEnum levelEnum = QMetaEnum::fromType<Alignment::LevelZone>();
+    QMetaEnum phaseEnum = QMetaEnum::fromType<Alignment::PhaseZone>();
+
+    return QString(levelEnum.valueToKey(zone.first)) + " "  + QString(phaseEnum.valueToKey(zone.second));
 }

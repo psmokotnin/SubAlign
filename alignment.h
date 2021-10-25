@@ -43,13 +43,17 @@ public:
     };
     enum LevelZone {
         Combing         = 0b001,
-        Combining       = 0b010,
+        Transition      = 0b010, //in Bob's book it is Combining
         Isolation       = 0b100
     };
     enum PhaseZone {
         Coupling        = 0b01000,
         Cancellation    = 0b10000
     };
+    Q_ENUM(LevelZone)
+    Q_ENUM(PhaseZone)
+
+    qreal yOnAxis(qreal x) const noexcept;
 
     qreal maxPhaseOffset() const noexcept;
     void setMaxPhaseOffset(const qreal &maxPhaseOffset);

@@ -5,7 +5,9 @@
 SplPlaneChart::SplPlaneChart(QQuickItem *parent) : ChartItem(parent), m_plane(XY)
 {
     setFlag(QQuickItem::ItemHasContents);
-    //m_padding.right = 50;
+    m_x.setUnit("m");
+    m_y.setUnit("m");
+    m_unit = "dB";
 }
 
 void SplPlaneChart::paintChart(QPainter *painter)
@@ -97,4 +99,19 @@ void SplPlaneChart::setPlane(Plane newPlane) noexcept
         return;
     m_plane = newPlane;
     emit planeChanged();
+}
+
+QString SplPlaneChart::value(QPoint position) const noexcept
+{
+    auto const &a = m_alignment->audience()->start();
+    auto const &b = m_alignment->audience()->stop();
+    auto k = (b.y() - a.y()) / (b.x() - a.x());
+    auto c = a.y() - a.x() * k;
+
+    auto x = m_x.reverse(position.x());
+    auto y = (m_plane == XY ? k * x + c : m_y.reverse(position.y()));
+    auto z = (m_plane == XY ? m_y.reverse(position.y()) : 0);
+
+    auto dataPoint = m_alignment->calculate(x, y, z);
+    return QString::number(dataPoint.spl.sum, 'f', 1);
 }

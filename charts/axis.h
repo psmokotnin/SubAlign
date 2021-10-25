@@ -7,6 +7,9 @@
 class ChartAxis : public QQuickPaintedItem
 {
     Q_OBJECT
+    Q_PROPERTY(QString unit READ unit CONSTANT)
+    QML_ELEMENT
+
 public:
     enum Direction {Vertical, Horizontal};
     ChartAxis(Direction direction, const ChartPadding &newPadding, QQuickItem *parent = Q_NULLPTR);
@@ -34,6 +37,9 @@ public:
     qreal widthf() const noexcept;
     qreal heightf() const noexcept;
 
+    const QString &unit() const;
+    void setUnit(QString unit) noexcept;
+
 public slots:
     void updateWidth();
     void updateHeight();
@@ -45,7 +51,7 @@ private:
     const ChartPadding &m_padding;
     qreal m_min, m_max, m_centralLabel;
     std::vector<qreal> m_labels;
-
+    QString m_unit;
 };
 
 #endif // CHARTAXIS_H

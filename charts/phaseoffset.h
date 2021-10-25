@@ -9,7 +9,7 @@ class PhaseOffsetChart : public ChartItem
     QML_ELEMENT
 
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
-    Q_PROPERTY(QPoint xo READ xo WRITE setXo NOTIFY xoChanged)
+    Q_PROPERTY(qreal xo READ xo WRITE setXo NOTIFY xoChanged)
 
 public:
     PhaseOffsetChart(QQuickItem *parent = Q_NULLPTR);
@@ -17,12 +17,13 @@ public:
     const QColor &color() const;
     void setColor(const QColor &newColor);
 
-    QPoint xo() const;
-    void setXo(QPoint newXo);
+    qreal xo() const;
+    void setXo(qreal newXo);
+
+    Q_INVOKABLE QString value(QPoint position) const noexcept override;
 
 signals:
     void colorChanged();
-
     void xoChanged();
 
 protected:
@@ -31,7 +32,7 @@ protected:
 
 private:
     QColor m_color;
-    QPoint m_xo;
+    qreal m_xo;
 };
 
 #endif // PHASEOFFSETCHART_H

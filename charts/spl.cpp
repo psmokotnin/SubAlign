@@ -5,6 +5,9 @@
 SplChart::SplChart(QQuickItem *parent) : ChartItem(parent)
 {
     setFlag(QQuickItem::ItemHasContents);
+    m_x.setUnit("m");
+    m_y.setUnit("dB");
+    m_unit = "dB";
 }
 
 void SplChart::paintChart(QPainter *painter)
@@ -71,6 +74,14 @@ void SplChart::setMainsColor(const QColor &newMainsColor)
         return;
     m_mainsColor = newMainsColor;
     emit mainsColorChanged();
+}
+
+QString SplChart::value(QPoint position) const noexcept
+{
+    auto x = m_x.reverse(position.x());
+    auto y = m_alignment->yOnAxis(x);
+    auto dataPoint = m_alignment->calculate(x, y, 0);
+    return QString::number(dataPoint.spl.sum, 'f', 1);
 }
 
 const QColor &SplChart::subwooferColor() const

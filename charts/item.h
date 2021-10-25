@@ -10,6 +10,9 @@ class ChartItem : public QQuickPaintedItem
     Q_OBJECT
 
     Q_PROPERTY(Alignment *alignment READ alignment WRITE setAlignment NOTIFY alignmentChanged)
+    Q_PROPERTY(ChartAxis *x READ x CONSTANT)
+    Q_PROPERTY(ChartAxis *y READ y CONSTANT)
+    Q_PROPERTY(QString unit READ unit CONSTANT)
 
 public:
     ChartItem(QQuickItem *parent = Q_NULLPTR);
@@ -22,6 +25,14 @@ public:
     qreal innerHeight() const noexcept;
     QRectF paddingRect() const noexcept;
 
+    Q_INVOKABLE QPointF point(QPoint position) const noexcept;
+    Q_INVOKABLE virtual QString value(QPoint position) const noexcept;
+
+    ChartAxis *x() noexcept;
+    ChartAxis *y() noexcept;
+
+    const QString &unit() const;
+
 signals:
     void alignmentChanged();
 
@@ -32,6 +43,7 @@ protected:
     Alignment *m_alignment;
     ChartAxis m_x, m_y;
     ChartPadding m_padding;
+    QString m_unit;
 };
 
 #endif // CHARTITEM_H
