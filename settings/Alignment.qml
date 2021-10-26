@@ -8,9 +8,9 @@ GridLayout {
     columns: 2
 
     Label {
-        text: qsTr("frequency")
+        text: qsTr("F")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {
@@ -26,9 +26,9 @@ GridLayout {
     }
 
     Label {
-        text: qsTr("max offset")
+        text: qsTr("max\noffset")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {

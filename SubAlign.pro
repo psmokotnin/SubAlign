@@ -43,6 +43,7 @@ HEADERS += \
     alignment.h \
     audience.h \
     charts/axis.h \
+    charts/cursor.h \
     charts/padding.h \
     charts/item.h \
     charts/phaseoffset.h \
@@ -56,6 +57,7 @@ SOURCES += \
         alignment.cpp \
         audience.cpp \
         charts/axis.cpp \
+        charts/cursor.cpp \
         charts/item.cpp \
         charts/phaseoffset.cpp \
         charts/relativelevel.cpp \

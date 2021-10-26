@@ -7,9 +7,8 @@ GridLayout {
     columns: 2
 
     Label {
-        text: qsTr("frequency")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {
@@ -30,9 +29,8 @@ GridLayout {
     }
 
     Label {
-        text: qsTr("phase span")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {

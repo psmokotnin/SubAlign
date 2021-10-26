@@ -3,8 +3,11 @@
 #include <QPainterPath>
 
 ChartItem::ChartItem(QQuickItem *parent) : QQuickPaintedItem(parent),
-    m_alignment(nullptr), m_x(ChartAxis::Horizontal, m_padding, this), m_y(ChartAxis::Vertical, m_padding, this),
-    m_padding(), m_unit()
+    m_alignment(nullptr),
+    m_x(ChartAxis::Horizontal, m_padding, this),
+    m_y(ChartAxis::Vertical, m_padding, this),
+    m_padding(), m_cursor(m_padding, m_x, m_y, this),
+    m_unit()
 {
     setFlag(QQuickItem::ItemHasContents);
     setZ(z() + 1);
@@ -91,6 +94,11 @@ ChartAxis *ChartItem::x() noexcept
 ChartAxis *ChartItem::y() noexcept
 {
     return &m_y;
+}
+
+ChartCursor *ChartItem::cursor() noexcept
+{
+    return &m_cursor;
 }
 
 const QString &ChartItem::unit() const
