@@ -33,6 +33,11 @@ ios: {
 }
 
 INCLUDEPATH += charts
+ICON = resources/icon.icns
+
+ios {
+    QMAKE_ASSET_CATALOGS += AppIcons/Assets.xcassets
+}
 
 HEADERS += \
     alignment.h \
