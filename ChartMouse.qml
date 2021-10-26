@@ -26,11 +26,16 @@ MouseArea {
 
         let value = chart.value(Qt.point(position.x, position.y));
         zItem.text = value + chart.unit;
+
+        chart.cursor.x = point.x;
+        chart.cursor.y = point.y;
     }
 
     onExited: {
         xItem.text = "";
         yItem.text = "";
         zItem.text = "";
+        parent.cursor.x = NaN;
+        parent.cursor.y = NaN;
     }
 }
