@@ -9,7 +9,7 @@ GridLayout {
     Label {
         text: qsTr("X")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {
@@ -27,7 +27,7 @@ GridLayout {
     Label {
         text: qsTr("Y")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {
@@ -45,7 +45,7 @@ GridLayout {
     Label {
         text: qsTr("Level")
         horizontalAlignment: Qt.AlignRight
-        Layout.preferredWidth: 80
+        Layout.preferredWidth: 50
     }
 
     FloatSpinBox {
