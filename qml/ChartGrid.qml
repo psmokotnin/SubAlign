@@ -217,7 +217,7 @@ GridLayout {
                 textFormat: Text.RichText
                 onLinkActivated: Qt.openUrlExternally(link)
                 text: qsTr(
-                        "<a style='color:%1' href=\"https://opensoundmeter.com\">Pavel Smokotnin</a>"
+                        "<a style='color:%1' href=\"https://opensoundmeter.com?utm_source=tools&utm_medium=subalign&utm_campaign=promo\">Pavel Smokotnin</a>"
                     ).arg(Material.accentColor)
             }
         }
@@ -265,7 +265,7 @@ GridLayout {
                 horizontalAlignment: Qt.AlignHCenter
                 verticalAlignment: Qt.AlignVCenter
                 text: qsTr(
-                        "<a style='color:%1' href=\"https://www.merlijnvanveen.nl/en/calculators\">more calculators</a>"
+                        "<a style='color:%1' href=\"https://opensoundmeter.com/tools?utm_source=tools&utm_medium=subalign&utm_campaign=promo\">more tools</a>"
                     ).arg(Material.accentColor)
             }
     }

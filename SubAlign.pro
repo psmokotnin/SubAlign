@@ -11,7 +11,7 @@ QML_IMPORT_MAJOR_VERSION = 1
 # In order to do so, uncomment the following line.
 DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-RESOURCES += qml.qrc \
+RESOURCES += qml/qml.qrc \
     resources.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
@@ -30,42 +30,47 @@ ios: {
     QMAKE_APPLE_TARGETED_DEVICE_FAMILY = 2 #iPad
     QMAKE_IOS_DEVICE_ARCHS = "arm64"
     DEFINES += SUPPORT_64_BIT_IOS
-}
 
-INCLUDEPATH += charts
-ICON = resources/icon.icns
-
-ios {
     QMAKE_ASSET_CATALOGS += AppIcons/Assets.xcassets
+
+    app_launch_images.files = $$PWD/AppIcons/Launch.xib $$files($$PWD/AppIcons/LaunchImage*.png)
+    QMAKE_BUNDLE_DATA += app_launch_images
+
+    QMAKE_INFO_PLIST = $$PWD/ios.plist
 }
 
+INCLUDEPATH += \
+        src \
+        src/charts
 HEADERS += \
-    alignment.h \
-    audience.h \
-    charts/axis.h \
-    charts/cursor.h \
-    charts/padding.h \
-    charts/item.h \
-    charts/phaseoffset.h \
-    charts/relativelevel.h \
-    charts/spl.h \
-    charts/splplane.h \
-    environment.h \
-    loudspeaker.h
+        src/alignment.h \
+        src/audience.h \
+        src/charts/axis.h \
+        src/charts/cursor.h \
+        src/charts/padding.h \
+        src/charts/item.h \
+        src/charts/phaseoffset.h \
+        src/charts/relativelevel.h \
+        src/charts/spl.h \
+        src/charts/splplane.h \
+        src/environment.h \
+        src/loudspeaker.h
 
 SOURCES += \
-        alignment.cpp \
-        audience.cpp \
-        charts/axis.cpp \
-        charts/cursor.cpp \
-        charts/item.cpp \
-        charts/phaseoffset.cpp \
-        charts/relativelevel.cpp \
-        charts/spl.cpp \
-        charts/splplane.cpp \
-        environment.cpp \
-        loudspeaker.cpp \
-        main.cpp
+        src/alignment.cpp \
+        src/audience.cpp \
+        src/charts/axis.cpp \
+        src/charts/cursor.cpp \
+        src/charts/item.cpp \
+        src/charts/phaseoffset.cpp \
+        src/charts/relativelevel.cpp \
+        src/charts/spl.cpp \
+        src/charts/splplane.cpp \
+        src/environment.cpp \
+        src/loudspeaker.cpp \
+        src/main.cpp
 
 DISTFILES += \
         style.astylerc
+
+ICON = AppIcons/icon.icns
