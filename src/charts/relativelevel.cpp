@@ -6,7 +6,7 @@ RelativeLevelChart::RelativeLevelChart(QQuickItem *parent) : ChartItem(parent), 
 {
     setFlag(QQuickItem::ItemHasContents);
     m_x.setUnit("m");
-    m_y.setUnit("dB");
+    m_y.setUnit("m");
     m_unit = "";
 }
 void RelativeLevelChart::paintChart(QPainter *painter)
