@@ -15,11 +15,12 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Layouts 1.12
 import QtQuick.Controls 2.12
 
 Rectangle {
+    id: control
     property bool opened : false
     property string title : "Text value"
 
@@ -40,37 +41,6 @@ Rectangle {
             left: parent.left
             right: parent.right
             top: parent.top
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.RightButton
-        onClicked: {
-            if (parent.opened) {
-                parent.z = 1;
-                parent.Layout.preferredWidth = Layout.columnSpan
-                parent.Layout.preferredHeight = Layout.rowSpan
-            } else {
-                parent.z = 3;
-                parent.Layout.preferredWidth = grid.width
-                parent.Layout.preferredHeight = grid.height
-            }
-            parent.opened = !parent.opened;
-        }
-    }
-
-    Behavior on Layout.preferredHeight {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.Linear
-        }
-    }
-
-    Behavior on Layout.preferredWidth {
-        NumberAnimation {
-            duration: 500
-            easing.type: Easing.Linear
         }
     }
 }
