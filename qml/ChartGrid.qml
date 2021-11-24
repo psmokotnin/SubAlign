@@ -25,7 +25,7 @@ GridLayout {
     id: grid
 
     property int spacing : 10
-    property string chartBackground : "white"// "#c7d4a1"
+    property string chartBackground : "white"
     property Alignment source : alignment
     rows: 2
     columns: 3
@@ -214,69 +214,64 @@ GridLayout {
     }
 
     Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredWidth: Layout.columnSpan
+        Layout.columnSpan: 3
         Layout.preferredHeight: 50
-        clip: true
+        Layout.fillWidth: true
         color: chartBackground
 
         RowLayout {
+            id: footerRow
+            readonly property int itemWidth : (width - spacing * 2) / 3
             anchors.fill: parent
 
-            Image {
-                source: "qrc:/images/resources/PavelLogo.png"
-                Layout.preferredHeight: 40
-                Layout.preferredWidth: 40
-                Layout.margins: 5
+            RowLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: footerRow.itemWidth
+
+                Image {
+                    source: "qrc:/images/resources/PavelLogo.png"
+                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 40
+                    Layout.margins: 5
+                }
+
+                Text {
+                    textFormat: Text.RichText
+                    onLinkActivated: Qt.openUrlExternally(link)
+                    text: qsTr(
+                            "<a style='color:%1' href=\"https://opensoundmeter.com?utm_source=tools&utm_medium=subalign&utm_campaign=promo\">Pavel Smokotnin</a>"
+                        ).arg(Material.accentColor)
+                }
+            }
+
+            RowLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: footerRow.itemWidth
+
+                Image {
+                    source: "qrc:/images/resources/MerlijnLogo.png"
+                    Layout.preferredHeight: 40
+                    Layout.preferredWidth: 40
+                    Layout.margins: 5
+                }
+
+                Text {
+                    textFormat: Text.RichText
+                    onLinkActivated: Qt.openUrlExternally(link)
+                    text: qsTr(
+                            "Original calculator was created<br/>
+                            by <a style='color:%1' href=\"https://www.merlijnvanveen.nl\">Merlijn Van Veen</a>"
+                        ).arg(Material.accentColor)
+                }
             }
 
             Text {
-                textFormat: Text.RichText
-                onLinkActivated: Qt.openUrlExternally(link)
-                text: qsTr(
-                        "<a style='color:%1' href=\"https://opensoundmeter.com?utm_source=tools&utm_medium=subalign&utm_campaign=promo\">Pavel Smokotnin</a>"
-                    ).arg(Material.accentColor)
-            }
-        }
-    }
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                Layout.preferredWidth: footerRow.itemWidth
 
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredWidth: Layout.columnSpan
-        Layout.preferredHeight: 50
-        clip: true
-        color: chartBackground
-
-        RowLayout {
-            anchors.fill: parent
-
-            Image {
-                source: "qrc:/images/resources/MerlijnLogo.png"
-                Layout.preferredHeight: 40
-                Layout.preferredWidth: 40
-                Layout.margins: 5
-            }
-
-            Text {
-                textFormat: Text.RichText
-                onLinkActivated: Qt.openUrlExternally(link)
-                text: qsTr(
-                        "Original calculator was created<br/>
-                        by <a style='color:%1' href=\"https://www.merlijnvanveen.nl\">Merlijn Van Veen</a>"
-                    ).arg(Material.accentColor)
-            }
-        }
-    }
-
-    Rectangle {
-        Layout.fillWidth: true
-        Layout.preferredWidth: Layout.columnSpan
-        Layout.preferredHeight: 50
-        clip: true
-        color: chartBackground
-
-            Text {
-                anchors.fill: parent
                 textFormat: Text.RichText
                 onLinkActivated: Qt.openUrlExternally(link)
                 horizontalAlignment: Qt.AlignHCenter
@@ -285,5 +280,6 @@ GridLayout {
                         "<a style='color:%1' href=\"https://opensoundmeter.com/tools?utm_source=tools&utm_medium=subalign&utm_campaign=promo\">more tools</a>"
                     ).arg(Material.accentColor)
             }
+        }
     }
 }

@@ -15,15 +15,19 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQuick.Layouts 1.12
 
 MouseArea {
+    id:control
     anchors.fill: parent
     hoverEnabled: true
 
     required property Item xItem
     required property Item yItem
     required property Item zItem
+
+    onDoubleClicked: toggleOpen();
 
     onPositionChanged: function(position) {
         let chart = parent;
@@ -54,5 +58,22 @@ MouseArea {
         zItem.text = "";
         parent.cursor.x = NaN;
         parent.cursor.y = NaN;
+    }
+
+    function toggleOpen()
+    {
+        let wrap = control.parent.parent;
+        let grid = control.parent.parent.parent;
+
+        if (wrap.opened) {
+            wrap.z = 1;
+            wrap.Layout.preferredWidth = Layout.columnSpan
+            wrap.Layout.preferredHeight = Layout.rowSpan
+        } else {
+            wrap.z = 3;
+            wrap.Layout.preferredWidth = grid.width
+            wrap.Layout.preferredHeight = grid.height
+        }
+        wrap.opened = !wrap.opened;
     }
 }
